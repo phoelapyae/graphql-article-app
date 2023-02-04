@@ -1,0 +1,56 @@
+type Mutation {
+  createUser(
+    name: String!
+    email: String! @rules(apply: ["email", "unique:users"])
+    password: String! @hash @rules(apply: ["min:6"])
+  ): User @create
+
+  login(
+    email: String!
+    password: String!
+  ): String @field(resolver: "AuthMutator@resolve")
+
+  createArticle(
+    title: String!
+    content: String!
+    user_id: Int!
+  ): Article @create
+
+  updateArticle(
+    id: ID!
+    title: String!
+    content: String!
+  ): Article @update
+
+  deleteArticle(id: ID!): Article! @delete
+  upsertArticle(
+    id: ID!
+    title: String!
+    content: String
+  ): Article @upsert
+
+  createEmployee(
+    ee_id: String! @rules(apply: ["unique:employees"]),
+    fullname: String!
+    job_title: String!
+    gender: String!
+    age: Int!
+    hire_date: String!
+    annual_salary: Int!
+    bonus: Int!
+  ): Employee @create
+
+  updateEmployee(
+    id: ID!
+    ee_id: String!,
+    fullname: String!
+    job_title: String!
+    gender: String!
+    age: Int!
+    hire_date: String!
+    annual_salary: Int!
+    bonus: Int!
+  ): Employee @update
+
+  deleteEmployee(id: ID!): Employee! @delete
+}
