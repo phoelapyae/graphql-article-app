@@ -20,16 +20,13 @@ class AuthMutator
      */
     public function resolve($rootValue, array $args, GraphQLContext $context, ResolveInfo $resolveInfo)
     {
+        // TODO implement the resolver
         $credentials = Arr::only($args, ['email', 'password']);
-
-        if (Auth::once($credentials)) {
-            $token = Str::random(60);
-
-            $user = auth()->user();
-            $user->api_token = $token;
-            $user->save();
-
-            return $token;
+        
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $token = $user->createToken('api');
+            return $token->plainTextToken;
         }
 
         return null;

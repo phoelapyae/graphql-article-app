@@ -2,12 +2,16 @@
 #import mutation.graphql
 
 "Indicates what fields are available at the top level of a query operation."
+
 type Query {
     user(id: ID @eq): User @find
-    users: [User!]! @paginate,
+}
+
+extend type Query @guard {
+    users: [User!]! @paginate
     article(id: ID!): Article
     articles: [Article!]! @paginate
-    me: User @auth(guard: "api")
+    me: User @auth
     employees: [Employee!]! @paginate
     employee(id: ID @eq): Employee @find
 }
